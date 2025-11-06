@@ -1,10 +1,27 @@
 <script setup lang="ts">
-const { handleAction, board } = useBoard()
-const { messages, input, send } = useChat(handleAction)
+const { handleAction, board, loadPages } = useBoard()
+const { messages, input, send, loadMessages } = useChat(handleAction)
 
-const { input: initialInput } = useRoute().query as { input: string }
-input.value = initialInput
-send()
+const route = useRoute()
+const { input: initialInput } = route.query as { input: string }
+
+if (initialInput) {
+  input.value = initialInput
+  const { input: _, ...restQuery } = route.query
+  navigateTo({ query: restQuery }, { replace: true })
+  send()
+}
+
+const id = useRoute().params.id as string
+
+void (async () => {
+  const { messages, pages } = await $fetch<{ messages: Message[], pages: Page[] }>(`/api/chat/${id}/info`)
+  if (messages.length === 0) {
+    return
+  }
+  loadMessages(messages)
+  loadPages(pages)
+})()
 
 onMounted(() => {
   console.log(board.value)

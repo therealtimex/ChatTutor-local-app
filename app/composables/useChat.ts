@@ -70,6 +70,10 @@ export const useChat = (
     }
   }
 
+  const loadMessages = (msgs: Message[]) => {
+    messages.value = msgs
+  }
+
   onUnmounted(() => {
     cleanup()
   })
@@ -79,5 +83,6 @@ export const useChat = (
     input,
     send,
     cleanup,
+    loadMessages,
   }
 }

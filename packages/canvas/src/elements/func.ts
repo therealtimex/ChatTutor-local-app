@@ -9,7 +9,7 @@ export interface FuncAttributes {
 export const func = defineElement<FuncAttributes>((options) => {
   return (board) => {
     const f = calculate<(x: number) => number>(options.expression)
-    return board.create('function', [f, ...(options.domain ?? [])])
+    return board.create('functiongraph', [f, ...(options.domain ?? [])])
   }
 })
 
