@@ -11,4 +11,5 @@ export interface Page<T extends Action = FullAction, A extends string = string> 
   title: string
   id?: string
   steps: T[]
+  notes: string[]
 }

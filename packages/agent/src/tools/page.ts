@@ -38,6 +38,7 @@ export const getPageTools = async (pages: Page[]) => {
         domain: domain as [number, number],
         axis,
         grid,
+        notes: [],
       } as CanvasPage)
       return {
         success: true,
@@ -47,5 +48,29 @@ export const getPageTools = async (pages: Page[]) => {
     }
   })
 
-  return await Promise.all([createCanvas]) as Tool[]
+  const note = tool({
+    name: 'note',
+    description: 'Add markdown note on a page',
+    parameters: type({
+      page: type('string').describe('The page to note'),
+      content: type('string').describe('The markdown content to add on the page note area.'),
+    }),
+    execute: async ({ page, content }) => {
+      const targetPage = pages.find(p => p.id === page)
+      if (!targetPage) {
+        return {
+          success: false,
+          message: 'Page not found',
+        }
+      }
+      targetPage.notes.push(content)
+      return {
+        success: true,
+        message: 'Note added successfully',
+        page: page,
+      }
+    }
+  })
+
+  return await Promise.all([createCanvas, note]) as Tool[]
 }

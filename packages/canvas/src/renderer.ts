@@ -35,6 +35,7 @@ export const createCanvasRenderer = (id: string, options: CanvasRendererOptions)
 
   const processAttrs = (attrs: object): object => {
     const resolveUse = (value: string) => {
+      if (typeof value !== 'string') return value
       if (value.trim().startsWith('use(') && value.trim().endsWith(')')) {
         const id = value.trim().slice(4, -1)
         const element = getElement(id)

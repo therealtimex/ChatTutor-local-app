@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { handleAction, board, loadPages, currentPages, page } = useBoard()
+import { MarkdownRender } from 'vue-renderer-markdown'
+
+const { handleAction, board, loadPages, currentPages, page, notes } = useBoard()
 const { messages, input, send, loadMessages } = useChat(handleAction)
 const promptAreaRef = ref()
 
@@ -38,14 +40,35 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-row w-full h-full overflow-hidden">
-    <div class="flex flex-1 flex-col h-full items-center justify-center overflow-hidden p-5 min-w-0">
-      <div ref="board" class="w-full h-130 flex justify-center" />
+    <div class="flex flex-1 flex-col h-full items-center justify-center overflow-hidden min-w-0 p-5">
+      <div class="flex flex-row w-full h-full gap-1">
+        <div
+          ref="board"
+          class="h-130 flex justify-center"
+          :class="notes.length > 0 ? 'w-2/3' : 'w-full'"
+        />
+        <div
+          v-if="notes.length > 0"
+          class="h-125 shadow-sm max-h-130 w-1/3 text-sm flex flex-col bg-gray-100 border border-gray-300 rounded-lg p-3 overflow-y-auto markdown"
+        >
+          <MarkdownRender :content="notes.join('\n\n')" />
+        </div>
+      </div>
       <div class="w-full max-w-screen-md justify-center flex flex-col gap-5">
-        <PagesPreview :pages="currentPages" @select="(id) => page = id" />
+        <PagesPreview
+          :pages="currentPages"
+          @select="(id) => page = id"
+        />
       </div>
     </div>
     <div class="flex flex-col h-screen max-h-screen bg-gray-200 w-100 p-3 shadow-lg flex-shrink-0">
-      <Chat ref="promptAreaRef" v-model:input="input" :messages="messages" @send="handleSend" @keydown.enter="handleSend" />
+      <Chat
+        ref="promptAreaRef"
+        v-model:input="input"
+        :messages="messages"
+        @send="handleSend"
+        @keydown.enter="handleSend"
+      />
     </div>
   </div>
 </template>

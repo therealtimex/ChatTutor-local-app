@@ -28,16 +28,13 @@ body {
 .markdown ol {
   font-size: 1rem;
   padding-left: 1.5rem;
-  margin: 0.5rem 0;
   list-style-position: outside;
 }
 
 .markdown ul li {
-  margin: 0.25rem 0;
 }
 
 .markdown ol li {
-  margin: 0.25rem 0;
 }
 
 .markdown ul {
@@ -49,7 +46,6 @@ body {
 }
 
 .markdown li {
-  font-size: 1rem;
 }
 
 /* 引用块 */

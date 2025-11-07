@@ -2,7 +2,7 @@ import { createCanvasRenderer } from '@chat-tutor/canvas'
 import type { CanvasPage, CanvasPageAction } from '@chat-tutor/canvas'
 import type { FullAction } from '@chat-tutor/shared'
 import { PageType } from '@chat-tutor/shared'
-import type { PageCreationAction } from '~~/packages/agent/src'
+import type { PageCreationAction, PageNoteAction } from '@chat-tutor/agent'
 
 export type Page = CanvasPage
 
@@ -12,9 +12,14 @@ export const useBoard = () => {
   const board = ref<HTMLElement | null>(null)
   const currentPages = ref<Page[]>([])
   const page = ref<string | null>(null)
+  const notes = ref<string[]>([])
 
   onMounted(() => {
     watch(page, (id) => {
+      const p = currentPages.value.find(p => p.id === id)
+      if (p && p.notes) {
+        notes.value = p.notes
+      }
       nextTick(() => {
         if (!id) return
         const ctn = board.value!.querySelector(`#${id}`)
@@ -62,6 +67,8 @@ export const useBoard = () => {
       handleCanvasAction(action)
     } else if (action.type === 'page') {
       handlePageCreationAction(action as PageCreationAction)
+    } else if (action.type === 'note') {
+      handlePageNoteAction(action as PageNoteAction)
     }
   }
 
@@ -81,9 +88,19 @@ export const useBoard = () => {
     loadPage(action.options as CanvasPage)
   }
 
+  const handlePageNoteAction = (action: PageNoteAction) => {
+    const p = currentPages.value.find(p => p.id === action.page)
+    if (!p) return
+    p.notes.push(action.options.content)
+    if (page.value === p.id) {
+      notes.value = p.notes
+    }
+  }
+
   return {
     board,
     page,
+    notes,
     currentPages,
     handleAction,
     loadPage,
