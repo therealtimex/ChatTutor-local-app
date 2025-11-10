@@ -73,3 +73,4 @@ export const createAgent = (options: AgentOptions) => {
 export * from './tools'
 export * from './painter'
 export * from './types'
+export * from './title'

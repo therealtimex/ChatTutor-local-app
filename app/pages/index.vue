@@ -4,7 +4,7 @@ const running = ref(false)
 
 const create = async () => {
   running.value = true
-  const { id } = await $fetch<{ id: string }>('/api/chat/create', {
+  const { id } = await $fetch<{ id: string }>(`/api/chat/create?input=${input.value}`, {
     method: 'POST',
   })
   running.value = false

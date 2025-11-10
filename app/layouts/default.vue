@@ -21,14 +21,21 @@ type Chat = {
 
 const chats = ref<Chat[]>([])
 
-void (async () => {
+const loadChats = async () => {
   const c = await $fetch<{ id: string, title: string, createdAt: string, updatedAt: string, status: Status }[]>('/api/chat/history')
   chats.value = c.map((chat) => ({
     id: chat.id,
     title: chat.title,
-    date: chat.createdAt,
+    date: chat.createdAt.match(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})/)?.slice(1).join(' ') ?? '',
   }))
-})()
+}
+
+void loadChats()
+
+const interval = setInterval(loadChats, 5000)
+onUnmounted(() => {
+  clearInterval(interval)
+})
 </script>
 
 <template>

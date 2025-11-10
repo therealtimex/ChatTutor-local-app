@@ -67,7 +67,8 @@ Fill your config in `.env` file.
 - `API_KEY`: The API key to use.
 - `BASE_URL`: The base URL to use.
 - `AGENT_MODEL`: The model to use for the agent.
-- `PAINTER_MODEL`: The model to use for the painter. Suggest: `claude-sonnet-4.5`
+- `PAINTER_MODEL`: The model to use for the painter. Suggest: `claude-sonnet-4.5` (optional, default to `AGENT_MODEL`)
+- `TITLE_MODEL`: The model to use for generate chat title (optional, default to `AGENT_MODEL`)
 - `DATABASE_URL`: The Postgres URL to use.
 
 ### Initialize

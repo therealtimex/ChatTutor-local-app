@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   const apiKey = process.env.API_KEY!
   const baseURL = process.env.BASE_URL!
   const agentModel = process.env.AGENT_MODEL!
-  const painterModel = process.env.PAINTER_MODEL!
+  const painterModel = process.env.PAINTER_MODEL ?? agentModel
   const { input } = getQuery(event) as { input: string }
   const { id } = getRouterParams(event)
 

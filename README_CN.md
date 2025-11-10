@@ -67,7 +67,8 @@ cp .env.example .env
 - `API_KEY`: 所使用的 API 密钥。
 - `BASE_URL`: 接口基础地址。
 - `AGENT_MODEL`: 用于 Agent 的模型。
-- `PAINTER_MODEL`: 用于 Painter 的模型。建议使用 `claude-sonnet-4.5`
+- `PAINTER_MODEL`: 用于 Painter 的模型。建议使用 `claude-sonnet-4.5` (可选，默认与 `AGENT_MODEL` 相同)
+- `TITLE_MODEL`: 用于生成聊天标题的模型。(可选，默认与 `AGENT_MODEL` 相同)
 - `DATABASE_URL`: Postgres 数据库连接地址。
 
 ### 初始化
