@@ -6,12 +6,40 @@ import type { FullAction, Page } from '@chat-tutor/shared'
 import type { Message as DisplayMessage, Context, AllAction } from '#shared/types'
 import { createMessageResolver } from '#shared/types/message'
 
+async function imageUrlToBase64(url: string): Promise<string> {
+  try {
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.statusText}`)
+    }
+
+    const arrayBuffer = await response.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+    const base64 = buffer.toString('base64')
+
+    const contentType = response.headers.get('content-type') || 'image/jpeg'
+
+    return `data:${contentType};base64,${base64}`
+  } catch (error) {
+    console.error(`Failed to convert image URL to base64: ${url}`, error)
+    return url
+  }
+}
+
 export default defineEventHandler(async (event) => {
   const apiKey = process.env.API_KEY!
   const baseURL = process.env.BASE_URL!
   const agentModel = process.env.AGENT_MODEL!
   const painterModel = process.env.PAINTER_MODEL ?? agentModel
-  const { input } = getQuery(event) as { input: string }
+  const { input, images: imagesString } = getQuery(event) as { input: string, images: string }
+  const isDev = process.env.NODE_ENV === 'development'
+
+  let images = imagesString ? imagesString.split(',').filter(Boolean) : []
+
+  if (isDev && images.length > 0) {
+    images = await Promise.all(images.map(url => imageUrlToBase64(url)))
+  }
+
   const { id } = getRouterParams(event)
 
   const [{ pages, context, status, messages }]
@@ -32,6 +60,7 @@ export default defineEventHandler(async (event) => {
   messages.push({
     type: 'user',
     content: input,
+    images,
     id: crypto.randomUUID(),
   })
 
@@ -59,7 +88,9 @@ export default defineEventHandler(async (event) => {
     stream.push(JSON.stringify(chunk))
   }
   event.waitUntil((async () => {
-    await agent(input, send as AgentChunker)
+    await agent(input, send as AgentChunker, {
+      images
+    })
   })().then(async () => {
     await db.update(chat).set({
       context,

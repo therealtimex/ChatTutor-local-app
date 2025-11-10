@@ -71,6 +71,15 @@ Fill your config in `.env` file.
 - `TITLE_MODEL`: The model to use for generate chat title (optional, default to `AGENT_MODEL`)
 - `DATABASE_URL`: The Postgres URL to use.
 
+> [!WARNING]
+>
+> If you don't set them, images will be unavailable.
+- `OSS_ENDPOINT`: The OSS endpoint to use.
+- `OSS_ACCESS_KEY`: The OSS access key to use.
+- `OSS_SECRET_KEY`: The OSS secret key to use.
+- `OSS_BUCKET`: The OSS bucket to use.
+- `OSS_REGION`: The OSS region to use. (optional)
+
 ### Initialize
 
 ```bash

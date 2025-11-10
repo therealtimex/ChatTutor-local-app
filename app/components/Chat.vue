@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Message } from '#shared/types'
+import type { Resource } from './PromptArea.vue'
 
 const props = defineProps<{
   messages: Message[]
@@ -7,6 +8,7 @@ const props = defineProps<{
 }>()
 
 const input = defineModel<string>('input', { required: true })
+const resources = defineModel<Resource[]>('resources', { required: true })
 const chatContainerRef = ref<HTMLDivElement | null>(null)
 const promptAreaRef = ref()
 const isUserScrolling = ref(false)
@@ -15,6 +17,10 @@ let scrollTimeout: NodeJS.Timeout | null = null
 const emits = defineEmits<{
   (e: 'send', input: string): void
 }>()
+
+const blur = () => {
+  promptAreaRef.value?.blur()
+}
 
 defineExpose({
   blur
@@ -91,6 +97,7 @@ onUnmounted(() => {
       <PromptArea
         ref="promptAreaRef"
         v-model:input="input"
+        v-model:resources="resources"
         :running="running"
         @send="emits('send', input)"
       />

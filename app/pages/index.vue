@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import type { Resource } from '../components/PromptArea.vue'
+
 const input = ref('')
 const running = ref(false)
+const resources = ref<Resource[]>([])
 
 const create = async () => {
   running.value = true
@@ -8,7 +11,7 @@ const create = async () => {
     method: 'POST',
   })
   running.value = false
-  navigateTo(`/chat/${id}?input=${input.value}`)
+  navigateTo(`/chat/${id}?input=${input.value}&images=${resources.value.filter(r => r.type === 'image').map(r => r.url).join(',')}`)
 }
 
 const getTime = (): 'morning' | 'afternoon' | 'evening' => {
@@ -23,7 +26,12 @@ const getTime = (): 'morning' | 'afternoon' | 'evening' => {
   <div class="size-full h-screen flex flex-col">
     <div class="w-full flex flex-row items-center gap-2 justify-end md:justify-start px-10 py-5">
       <div class="flex flex-row items-center">
-        <img src="/logo.png" alt="ChatTutor" width="32" height="32" />
+        <img
+          src="/logo.png"
+          alt="ChatTutor"
+          width="32"
+          height="32"
+        >
       </div>
       <span class="text-xl font-semibold text-gray-400 select-none">ChatTutor</span>
     </div>
@@ -33,7 +41,12 @@ const getTime = (): 'morning' | 'afternoon' | 'evening' => {
       </h1>
       <div class="w-full flex flex-col h-full justify-end md:justify-center items-center mb-auto">
         <div class="flex justify-end px-10 w-full md:max-w-200 h-35">
-          <PromptArea :running="running" v-model:input="input" @send="create" />
+          <PromptArea
+            v-model:input="input"
+            v-model:resources="resources"
+            :running="running"
+            @send="create"
+          />
         </div>
       </div>
     </div>

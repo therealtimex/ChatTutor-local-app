@@ -50,6 +50,7 @@ const classes = computed(() => {
     :border="message.type !== 'assistant'"
     :classes="classes"
     :running="running"
+    :images="message.type === 'user' ? message.images : []"
     @click="handleClick"
   />
 </template>

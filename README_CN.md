@@ -71,6 +71,14 @@ cp .env.example .env
 - `TITLE_MODEL`: 用于生成聊天标题的模型。(可选，默认与 `AGENT_MODEL` 相同)
 - `DATABASE_URL`: Postgres 数据库连接地址。
 
+> [!WARNING]
+>
+> 如果你没有设置这些环境变量，图像将不可用。
+- `OSS_ENDPOINT`: 对象存储服务的端点。
+- `OSS_ACCESS_KEY`: 对象存储服务的访问密钥。
+- `OSS_SECRET_KEY`: 对象存储服务的秘密密钥。
+- `OSS_BUCKET`: 对象存储服务的桶。
+- `OSS_REGION`: 对象存储服务的区域。(可选)
 ### 初始化
 
 ```bash

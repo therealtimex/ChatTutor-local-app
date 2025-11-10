@@ -3,11 +3,13 @@ import type { ActionHandler } from './useBoard'
 import { createMessageResolver } from '#shared/types/message'
 import type { FullAction } from '@chat-tutor/shared'
 import { v4 } from 'uuid'
+import type { Resource } from '../components/PromptArea.vue'
 
 export const useChat = (
   handleAction: ActionHandler,
 ) => {
   const messages = ref<Message[]>([])
+  const resources = ref<Resource[]>([])
   const resolve = createMessageResolver(
     (message: Message) => messages.value.push(message),
     () => messages.value,
@@ -21,6 +23,8 @@ export const useChat = (
   const send = async () => {
     running.value = true
     const i = input.value
+    const images = resources.value.filter(r => r.type === 'image').map(r => r.url)
+    resources.value.length = 0
     input.value = ''
     if (eventSource) {
       eventSource.close()
@@ -30,10 +34,11 @@ export const useChat = (
     messages.value.push({
       type: 'user',
       content: i,
+      images,
       id: v4(),
     })
     
-    eventSource = new EventSource(`/api/chat/${id}?input=${i}`)
+    eventSource = new EventSource(`/api/chat/${id}?input=${i}&images=${images.join(',')}`)
     
     eventSource.onmessage = (event) => {
       try {
@@ -78,6 +83,7 @@ export const useChat = (
   return {
     messages,
     input,
+    resources,
     running,
     send,
     cleanup,

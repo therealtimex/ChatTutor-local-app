@@ -5,6 +5,7 @@ import { v4 } from "uuid"
 export type UserMessage = {
   type: 'user'
   content: string
+  images: string[]
 }
 export type AssistantMessage = {
   type: 'assistant'

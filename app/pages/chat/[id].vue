@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { MarkdownRender } from 'vue-renderer-markdown'
+import { v4 } from 'uuid'
 
 const { handleAction, board, loadPages, currentPages, page, notes } = useBoard()
-const { messages, input, send, loadMessages, running } = useChat(handleAction)
+const { messages, input, resources, send, loadMessages, running } = useChat(handleAction)
 const promptAreaRef = ref()
 
 provide('page', page)
 
 const route = useRoute()
-const { input: initialInput } = route.query as { input: string }
+const { input: initialInput, images: initialImages } = route.query as { input: string, images: string }
 
 const handleSend = () => {
   send()
@@ -17,9 +18,18 @@ const handleSend = () => {
   })
 }
 
-if (initialInput) {
+if (initialInput || initialImages) {
   input.value = initialInput
-  const { input: _, ...restQuery } = route.query
+  if (initialImages) {
+    console.log(initialImages)
+    resources.value = initialImages.split(',').map(url => ({
+      type: 'image',
+      url,
+      id: v4(),
+    }))
+    console.log(resources.value)
+  }
+  const { input: _, images: __, ...restQuery } = route.query
   navigateTo({ query: restQuery }, { replace: true })
   handleSend()
 }
@@ -67,6 +77,7 @@ onMounted(() => {
       <Chat
         ref="promptAreaRef"
         v-model:input="input"
+        v-model:resources="resources"
         :messages="messages"
         :running="running"
         @send="handleSend"
