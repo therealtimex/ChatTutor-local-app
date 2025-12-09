@@ -60,21 +60,6 @@ DATABASE_URL="postgresql://user:password@localhost:5432/chattutor"
 
 ### 专业化模型
 
-#### `PAINTER_MODEL`
-- **类型**: 字符串
-- **必需**: 否
-- **默认值**: `AGENT_MODEL` 的值
-- **描述**: 用于 Painter Agent 的模型（专门用于绘制数学图形）
-- **推荐**: `claude-sonnet-4.5` 以获得最佳数学可视化效果
-
-```bash
-PAINTER_MODEL="claude-sonnet-4.5"
-```
-
-:::tip
-Painter Agent 专门用于创建数学可视化。使用更强大的模型如 `claude-sonnet-4.5` 可以显著提高生成的图形和动画的质量。
-:::
-
 #### `TITLE_MODEL`
 - **类型**: 字符串
 - **必需**: 否
@@ -136,15 +121,9 @@ OSS_BUCKET="chattutor-images"
 OSS_REGION="us-east-1"
 ```
 
-## 多 Agent 架构
+## 标题生成
 
-ChatTutor 使用 **多 Agent 架构** 提供专业化能力：
-
-- **Agent**：主要的对话 Agent，与用户交互，理解上下文并协调任务
-- **Painter**：专门用于绘制数学图形、创建可视化和生成交互式画布内容的专家 Agent
-- **标题生成器**：为聊天会话生成简洁、相关的标题
-
-这种架构允许不同的模型用于不同的任务，优化性能和成本。
+ChatTutor 使用专门的模型为聊天会话生成简洁、相关的标题。这使得标题生成可以独立于主对话 Agent 进行优化。
 
 ## 配置示例
 
@@ -160,7 +139,6 @@ AGENT_MODEL="claude-sonnet-4.5"
 DATABASE_URL="postgresql://chattutor:password@localhost:5432/chattutor"
 
 # 可选 - 专业化模型
-PAINTER_MODEL="claude-sonnet-4.5"
 TITLE_MODEL="claude-sonnet-4.5"
 
 # 可选 - 图片上传（S3 兼容存储）

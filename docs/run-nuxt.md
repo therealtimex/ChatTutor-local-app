@@ -64,11 +64,8 @@ ChatTutor/
 │   └── utils/            # Utility functions
 ├── packages/             # Shared packages
 │   ├── agent/           # AI agent implementation
-│   ├── canvas/          # Canvas rendering
+│   ├── mermaid/         # Mermaid diagram support
 │   └── ...
-├── packages-dsl/        # DSL implementation
-│   ├── renderer-core/   # Core renderer
-│   └── renderer-runtime/# Runtime renderer
 ├── server/              # API routes
 └── shared/              # Shared types and utilities
 ```

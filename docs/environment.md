@@ -60,21 +60,6 @@ DATABASE_URL="postgresql://user:password@localhost:5432/chattutor"
 
 ### Specialized Models
 
-#### `PAINTER_MODEL`
-- **Type**: String
-- **Required**: No
-- **Default**: Value of `AGENT_MODEL`
-- **Description**: The model to use for the Painter agent (specialized in drawing mathematical graphs)
-- **Recommended**: `claude-sonnet-4.5` for best mathematical visualization results
-
-```bash
-PAINTER_MODEL="claude-sonnet-4.5"
-```
-
-:::tip
-The Painter agent specializes in creating mathematical visualizations. Using a more capable model like `claude-sonnet-4.5` significantly improves the quality of generated graphs and animations.
-:::
-
 #### `TITLE_MODEL`
 - **Type**: String
 - **Required**: No
@@ -136,15 +121,9 @@ OSS_BUCKET="chattutor-images"
 OSS_REGION="us-east-1"
 ```
 
-## Multi-Agent Architecture
+## Title Generation
 
-ChatTutor uses a **multi-agent architecture** to provide specialized capabilities:
-
-- **Agent**: The primary conversational agent that interacts with users, understands context, and coordinates tasks
-- **Painter**: An expert agent specialized in drawing mathematical graphs, creating visualizations, and generating interactive canvas content
-- **Title Generator**: Generates concise, relevant titles for chat conversations
-
-This architecture allows different models to be used for different tasks, optimizing both performance and cost.
+ChatTutor uses a specialized model to generate concise, relevant titles for chat conversations. This allows the title generation to be optimized independently from the main conversation agent.
 
 ## Example Configuration
 
@@ -160,7 +139,6 @@ AGENT_MODEL="claude-sonnet-4.5"
 DATABASE_URL="postgresql://chattutor:password@localhost:5432/chattutor"
 
 # Optional - Specialized Models
-PAINTER_MODEL="claude-sonnet-4.5"
 TITLE_MODEL="claude-sonnet-4.5"
 
 # Optional - Image Upload (S3-compatible storage)

@@ -32,13 +32,7 @@ ChatTutor 是一个配备了电子白板功能的 AI 教师。
 
 传统的聊天机器人主要通过文字与用户交互，这在大多数场景下已经足够。然而，随着近年来大语言模型（LLM）的发展，越来越多的人开始使用 AI 来辅助学习。在真实课堂中，教师拥有许多教学工具——粉笔、电脑、黑板等——这些都能帮助学生更好地理解知识。但对于聊天机器人来说，仅靠文字传递信息是非常有限的，尤其是在 STEM 学科中。
 
-ChatTutor 有效地解决了这一问题。它将现实教育场景中的各种教学工具数字化呈现，让用户能够通过电子设备与之交互。我们赋予了 AI 使用这些教学工具的能力，使其真正成为一个“能动手”的教师。
-
-我们实现了一个响应式的DSL语法，模仿了现代前端框架的响应式系统，基于`@vue/reactivity`，让Agent通过响应式变量与用户进行交互，并通过修改响应式变量来控制元素的行为。同时，我们实现了一套数学组件库，并有精美的动画效果。
-
-> [!NOTE]
->
-> 关于DSL的实现，请参考`packages-dsl`目录；关于组件库的实现，请参考`libs`目录。
+ChatTutor 有效地解决了这一问题。它将现实教育场景中的各种教学工具数字化呈现，让用户能够通过电子设备与之交互。我们赋予了 AI 使用这些教学工具的能力，使其真正成为一个"能动手"的教师。
 
 ## Features
 
@@ -55,15 +49,6 @@ ChatTutor 有效地解决了这一问题。它将现实教育场景中的各种�
   <tr>
     <td>
       <img src="./public/demo3.png" alt="Math Canvas" width="100%" />
-    </td>
-  </tr>
-</table>
-
-##### 交互式表单
-<table>
-  <tr>
-    <td>
-      <img src="./public/demo6.png" alt="Interactive Forms" width="100%" />
     </td>
   </tr>
 </table>
@@ -107,14 +92,9 @@ cp .env.example .env
 
 在 `.env` 文件中填写你的配置信息：
 
-> [!NOTE]
->
-> ChatTutor 采用了 **多 Agent 架构**，其中 ***Agent*** 代表与用户交互的 Agent，而 ***Painter*** 则是一个专门用于绘制数学图形的专家 Agent。
-
 - `API_KEY`: 所使用的 API 密钥。
 - `BASE_URL`: 接口基础地址。
 - `AGENT_MODEL`: 用于 Agent 的模型。
-- `PAINTER_MODEL`: 用于 Painter 的模型。建议使用 `claude-sonnet-4.5` (可选，默认与 `AGENT_MODEL` 相同)
 - `TITLE_MODEL`: 用于生成聊天标题的模型。(可选，默认与 `AGENT_MODEL` 相同)
 - `DATABASE_URL`: Postgres 数据库连接地址。
 
@@ -138,7 +118,6 @@ docker compose up -d
 ## 核心功能所用项目
 
 - [xsai](https://github.com/moeru-ai/xsai): 轻量级 AI SDK。
-- [@vue/reactivity](https://github.com/vuejs/core/tree/main/packages/reactivity): Vue 的响应式系统。
 
 ## 赞助商
 我们的赞助商列表如下（排名不分先后）：

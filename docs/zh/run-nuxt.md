@@ -64,11 +64,8 @@ ChatTutor/
 │   └── utils/            # 工具函数
 ├── packages/             # 共享包
 │   ├── agent/           # AI Agent 实现
-│   ├── canvas/          # 画布渲染
+│   ├── mermaid/         # Mermaid 图表支持
 │   └── ...
-├── packages-dsl/        # DSL 实现
-│   ├── renderer-core/   # 核心渲染器
-│   └── renderer-runtime/# 运行时渲染器
 ├── server/              # API 路由
 └── shared/              # 共享类型和工具
 ```

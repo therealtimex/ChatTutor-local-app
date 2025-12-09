@@ -12,8 +12,6 @@ ChatTutor 是一个配备了电子白板功能的 AI 教师。
 
 ChatTutor 有效地解决了这一问题。它将现实教育场景中的各种教学工具数字化呈现，让用户能够通过电子设备与之交互。我们赋予了 AI 使用这些教学工具的能力，使其真正成为一个"能动手"的教师。
 
-我们实现了一个响应式的 DSL 语法，模仿了现代前端框架的响应式系统，基于 `@vue/reactivity`，让 Agent 通过响应式变量与用户进行交互，并通过修改响应式变量来控制元素的行为。同时，我们实现了一套数学组件库，并有精美的动画效果。
-
 :::tip 在线体验
 ChatTutor 已上线 [https://chattutor.app](https://chattutor.app)，请在设置中配置你的 API 密钥和模型。([https://chattutor.app/settings](https://chattutor.app/settings))
 :::
@@ -28,12 +26,6 @@ ChatTutor 已上线 [https://chattutor.app](https://chattutor.app)，请在设�
   <img src="/demo3.png" alt="数学画板演示 3" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
 </div>
 
-### 交互式表单
-
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
-  <img src="/demo6.png" alt="交互式表单演示" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
-</div>
-
 ### 思维导图
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
@@ -43,11 +35,8 @@ ChatTutor 已上线 [https://chattutor.app](https://chattutor.app)，请在设�
 
 ## 功能特性
 
-- **数学画板** - 精美的交互式数学可视化，具有流畅的动画和响应式组件
-- **交互式表单** - 动态表单，让 AI 能够以直观的方式收集和处理用户输入
+- **数学画板** - 精美的交互式数学可视化，具有流畅的动画效果
 - **思维导图支持** - 生成并交互式地展示知识结构的思维导图
-- **多 Agent 架构** - 针对不同任务的专业化 Agent：Agent 负责聊天，Painter 负责数学图形
-- **响应式 DSL** - 基于 Vue 的响应式系统，实现流畅的实时交互
 - **代码页面** (🚧 开发中)
 - **物理画板** (🚧 开发中)
 - **数字逻辑画板** (🚧 开发中)
@@ -61,7 +50,6 @@ ChatTutor 已上线 [https://chattutor.app](https://chattutor.app)，请在设�
 ## 核心功能所用项目
 
 - [xsai](https://github.com/moeru-ai/xsai) - 轻量级 AI SDK
-- [@vue/reactivity](https://github.com/vuejs/core/tree/main/packages/reactivity) - Vue 的响应式系统
 
 ## 许可证
 
