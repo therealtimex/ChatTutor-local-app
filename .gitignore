@@ -28,3 +28,6 @@ __snapshots__
 
 # Vitepress
 cache
+
+# PNPM
+.pnpm-store
