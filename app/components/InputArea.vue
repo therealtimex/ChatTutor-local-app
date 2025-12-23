@@ -7,9 +7,10 @@ defineProps<{
   type: InputTypeHTMLAttribute
   label: string
   description?: string
+  placeholder?: string
 }>()
 
-const model = defineModel<string>('model', { required: false, default: '' })
+const model = defineModel<string>({ required: false, default: '' })
 
 const saved = ref(true)
 let lastSaved = model.value
@@ -49,7 +50,9 @@ const save = () => {
     <template #tailing>
       <input
         v-model="model"
-        class="size-full p-2 bg-transparent outline-none resize-none text-gray-500 focus:outline-none rounded-lg shadow-sm border border-gray-300 dark:border-gray-500"
+        :type="type"
+        :placeholder="placeholder"
+        class="size-full p-2 bg-transparent outline-none resize-none text-gray-500 focus:outline-none rounded-lg shadow-sm border border-gray-300 dark:border-gray-500 placeholder:italic placeholder:opacity-50"
       >
       <div
         class="h-9 button-container"
