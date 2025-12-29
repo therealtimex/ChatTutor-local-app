@@ -3,7 +3,7 @@ import { Textarea } from '@chat-tutor/ui'
 </script>
 
 <template>
-  <div class="size-full">
-    <Textarea />
+  <div class="flex size-full">
+    <Textarea class="h-full flex"/>
   </div>
 </template>
