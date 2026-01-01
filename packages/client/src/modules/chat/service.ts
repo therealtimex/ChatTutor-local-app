@@ -98,7 +98,11 @@ export const createChatStream = () => {
     agentContext.push(...c.agent)
   }
   const resolve = createMessageResolver({
-    messages,
+    get: () => messages,
+    push: (message) => {
+      console.log(message)
+      messages.push(message)
+    },
     uuid: () => crypto.randomUUID(),
   })
   const agent = createAgent({
@@ -116,9 +120,13 @@ export const createChatStream = () => {
       if (input.type === 'user-input') {
         await agent({
           prompt: input.options.prompt,
-          emit,
+          emit: (action) => {
+            resolve(action)
+            emit(action)
+          },
           images: [],
         })
+        console.log(messages)
       }
     },
   }

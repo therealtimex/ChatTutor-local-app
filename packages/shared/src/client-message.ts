@@ -26,12 +26,43 @@ export interface PageCreateClientMessage extends BaseClientMessage {
   title: string
 }
 
+export interface PlanClientMessage extends DelayedClientMessage, ContentClientMessage {
+  type: 'plan'
+}
+
+export interface NoteClientMessage extends DelayedClientMessage, ContentClientMessage {
+  type: 'note'
+}
+
+export interface MermaidClientMessage extends DelayedClientMessage, ContentClientMessage {
+  type: 'mermaid'
+}
+
+export interface GGBClientMessage extends DelayedClientMessage, ContentClientMessage {
+  type: 'ggb'
+}
+
 export interface ErrorClientMessage extends BaseClientMessage {
   type: 'error'
   error: string
 }
 
-export type ClientMessage = UserClientMessage | AgentClientMessage | PageCreateClientMessage | ErrorClientMessage | DelayedClientMessage
+export type ClientMessage =
+  | UserClientMessage
+  | AgentClientMessage
+  | PageCreateClientMessage
+  | PlanClientMessage
+  | NoteClientMessage
+  | MermaidClientMessage
+  | GGBClientMessage
+  | ErrorClientMessage
+  | DelayedClientMessage
+
+export type TaskClientMessage = 
+  | PlanClientMessage
+  | NoteClientMessage
+  | MermaidClientMessage
+  | GGBClientMessage
 
 // Utils
 
