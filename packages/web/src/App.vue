@@ -9,5 +9,6 @@ import { useSettingsStore } from './store/settings';
 onMounted(() => {
   const settings = useSettingsStore();
   settings.applyColorMode();
+  settings.applyLanguage();
 });
 </script>

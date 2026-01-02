@@ -1,7 +1,8 @@
-import { usePreferredDark } from "@vueuse/core";
+import { usePreferredDark, usePreferredLanguages } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { computed, watch } from "vue";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export type ColorMode = "light" | "dark" | "system";
 
@@ -22,10 +23,22 @@ export const modelProviders = {
 
 export const useSettingsStore = defineStore("settings", () => {
   const browserDark = usePreferredDark();
+  const browserLanguages = usePreferredLanguages();
+  const { locale, t } = useI18n();
+
+  const preferZh = computed(() =>
+    browserLanguages.value.some(
+      (lang) => lang.startsWith("zh") || lang.startsWith("cn")
+    )
+  );
+
   const baseURL = ref(localStorage.getItem("baseURL") || "");
   const apiKey = ref(localStorage.getItem("apiKey") || "");
   const agentModel = ref(localStorage.getItem("agentModel") || "");
   const titleModel = ref(localStorage.getItem("titleModel") || "");
+  const language = ref(
+    localStorage.getItem("language") || (preferZh.value ? "zh" : "en")
+  );
   const colorMode = ref(
     (localStorage.getItem("colorMode") as ColorMode) || "system"
   );
@@ -48,10 +61,19 @@ export const useSettingsStore = defineStore("settings", () => {
     persist("titleModel", titleModel.value);
     persist("colorMode", colorMode.value);
     persist("modelProvider", modelProvider.value);
+    persist("language", language.value);
   };
 
   watch(
-    [baseURL, apiKey, agentModel, titleModel, colorMode, modelProvider],
+    [
+      baseURL,
+      apiKey,
+      agentModel,
+      titleModel,
+      colorMode,
+      modelProvider,
+      language,
+    ],
     saveSettings
   );
 
@@ -67,6 +89,12 @@ export const useSettingsStore = defineStore("settings", () => {
 
   watch(isDarkMode, applyColorMode);
 
+  const applyLanguage = () => {
+    locale.value = language.value;
+    document.title = t("common.chatTutor") + " - " + t("common.desc");
+  };
+  watch(language, applyLanguage);
+
   return {
     baseURL,
     apiKey,
@@ -74,8 +102,10 @@ export const useSettingsStore = defineStore("settings", () => {
     titleModel,
     colorMode,
     isDarkMode,
+    language,
     modelProvider,
     modelProviderDetails,
     applyColorMode,
+    applyLanguage,
   };
 });

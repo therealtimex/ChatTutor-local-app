@@ -8,9 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faRobot, faWindowMaximize } from '@fortawesome/free-solid-svg-icons'
 import { modelProviders } from '#/store/settings'
 const settingsStore = useSettingsStore()
-const { baseURL, apiKey, agentModel, titleModel, colorMode, modelProvider, modelProviderDetails } = storeToRefs(settingsStore)
+const { baseURL, apiKey, agentModel, titleModel, colorMode, modelProvider, modelProviderDetails, language } = storeToRefs(settingsStore)
 
-const { t, locale, availableLocales } = useI18n()
+const { t, availableLocales } = useI18n()
 
 const colorOptions = computed(() => {
   return ["light", "dark", "system"].map(mode => ({
@@ -75,7 +75,7 @@ const sectionTitleClass = 'font-semibold text-muted-foreground border-b pt-3 pb-
           v-model="colorMode" />
 
         <SettingsItem :label="t('settings.interface.language')" type="select" :options="localeOptions"
-          v-model="locale" />
+          v-model="language" />
       </section>
     </div>
 

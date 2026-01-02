@@ -3,7 +3,8 @@
     "chatTutor": "ChatTutor",
     "newChat": "New Chat",
     "recent": "Recent",
-    "empty": "No content yet"
+    "empty": "No content yet",
+    "desc": "Intelligent conversational teaching assistant"
   },
   "home": {
     "greeting": {

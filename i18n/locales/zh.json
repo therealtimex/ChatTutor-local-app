@@ -3,7 +3,8 @@
     "chatTutor": "ChatTutor",
     "newChat": "新聊天",
     "recent": "最近",
-    "empty": "暂无内容"
+    "empty": "暂无内容",
+    "desc": "智能对话式辅助教学"
   },
   "home": {
     "greeting": {
