@@ -3,6 +3,7 @@ import { client } from '#/utils/client'
 import { SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@chat-tutor/ui'
 import { onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { RouterLink } from 'vue-router'
 
 const { t } = useI18n()
 
@@ -50,9 +51,9 @@ onUnmounted(() => {
           :key="item.title"
         >
           <SidebarMenuButton as-child>
-            <a :href="item.url">
+            <RouterLink :to="item.url">
               <span>{{ item.title }}</span>
-            </a>
+            </RouterLink>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
