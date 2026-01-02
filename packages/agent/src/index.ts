@@ -5,7 +5,6 @@ import { createBlockParser } from './utils'
 import { agent } from './prompts'
 
 export const createAgent = (options: AgentOptions) => {
-  console.log(options)
   const gateway = createGateway({
     apiKey: options.apiKey,
     baseURL: options.baseURL,
@@ -17,7 +16,7 @@ export const createAgent = (options: AgentOptions) => {
   
   return async ({ prompt, emit, resources }: AgentInput) => {
     const { handle } = createBlockParser({
-      pages: [],
+      pages: options.pages,
       emit,
       emitText: (chunk) => {
         emit({

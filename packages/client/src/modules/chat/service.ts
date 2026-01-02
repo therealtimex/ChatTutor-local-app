@@ -1,9 +1,10 @@
 import { chat } from '@chat-tutor/db/schema'
 import { db } from '@chat-tutor/db'
 import { eq } from 'drizzle-orm'
-import { ClientAction, ClientMessage, Context, createMessageResolver, Status, UserAction } from '@chat-tutor/shared'
+import { ClientAction, ClientMessage, Context, createMessageResolver, Page, Status, UserAction } from '@chat-tutor/shared'
 import { AgentProvider, createAgent } from '@chat-tutor/agent'
 import { ModelMessage } from 'ai'
+import { ChatIsRunningError } from './error'
 
 export const getChats = async (limit: number, offset: number) => {
   try {
@@ -74,6 +75,51 @@ export const getChatMessages = async (id: string) => {
   return result.messages as ClientMessage[]
 }
 
+export const getChatPages = async (id: string) => {
+  const [result] = await db
+    .select({
+      pages: chat.pages,
+    })
+    .from(chat)
+    .where(eq(chat.id, id))
+  return result.pages as Page[]
+}
+
+export const getChatRecord = async (id: string) => {
+  const [result] = await db
+    .select({
+      id: chat.id,
+      context: chat.context,
+      messages: chat.messages,
+      pages: chat.pages,
+    })
+    .from(chat)
+    .where(eq(chat.id, id))
+  return result as {
+    id: string
+    context: Context
+    messages: ClientMessage[]
+    pages: Page[]
+  }
+}
+
+export const updateChatRecord = async (
+  { id, context, messages, pages }: {
+    id: string
+    context: Context
+    messages: ClientMessage[]
+    pages: Page[]
+  }) => {
+  await db
+    .update(chat)
+    .set({
+      context,
+      messages,
+      pages,
+    })
+    .where(eq(chat.id, id))
+}
+
 export const getChatStatus = async (id: string) => {
   const [result] = await db
     .select({
@@ -84,16 +130,25 @@ export const getChatStatus = async (id: string) => {
   return result.status as Status
 }
 
+export const updateChatStatus = async (id: string, status: Status) => {
+  await db
+    .update(chat)
+    .set({
+      status,
+    })
+    .where(eq(chat.id, id))
+}
+
 export const createChatStream = () => {
   const agentContext: ModelMessage[] = []
   const messages: ClientMessage[] = []
+  const pages: Page[] = []
   const update = async (id: string) => {
-    const [c, m] = await Promise.all([
-      getChatContext(id),
-      getChatMessages(id),
-    ])
+    const { context: c, messages: m, pages: p } = await getChatRecord(id)
     messages.length = 0
     messages.push(...m)
+    pages.length = 0
+    pages.push(...p)
     agentContext.length = 0
     agentContext.push(...c.agent)
   }
@@ -110,22 +165,42 @@ export const createChatStream = () => {
     baseURL: process.env.MODEL_BASE_URL!,
     model: process.env.AGENT_MODEL!,
     provider: process.env.AGENT_MODEL_PROVIDER as AgentProvider,
+    pages,
   })
   return {
     update,
     async open() { },
-    async act(input: UserAction, emit: (action: ClientAction) => void) {
+    async act(id: string, input: UserAction, emit: (action: ClientAction) => void) {
+      await update(id)
       resolve(input)
-      if (input.type === 'user-input') {
-        await agent({
-          prompt: input.options.prompt,
-          emit: (action) => {
-            resolve(action)
-            emit(action)
-          },
-          resources: input.options.resources || [],
-        })
-        console.log(agentContext.map(c => c.role).join(', '))
+      try {
+        if (input.type === 'user-input') {
+          const status = await getChatStatus(id)
+          if (status === Status.RUNNING) {
+            throw new ChatIsRunningError('Chat is already running')
+          }
+          await updateChatStatus(id, Status.RUNNING)
+          await agent({
+            prompt: input.options.prompt,
+            emit: (action) => {
+              resolve(action)
+              emit(action)
+            },
+            resources: input.options.resources || [],
+          })
+          await updateChatRecord({
+            id,
+            context: {
+              agent: agentContext,
+            },
+            messages,
+            pages,
+          })
+          await updateChatStatus(id, Status.COMPLETED)
+        }
+      } catch (error) {
+        await updateChatStatus(id, Status.FAILED)
+        throw error
       }
     },
   }

@@ -2,8 +2,12 @@ import { Elysia } from 'elysia'
 import { GetByIdModel, GetModel, GetStatusModel, GetStreamModel, PostModel } from './model'
 import { createChat, createChatStream, getChatById, getChats, getChatStatus } from './service'
 import { ClientMessage, Page, Status, UserAction } from '@chat-tutor/shared'
+import { ChatIsRunningError } from './error'
 
 export const chat = new Elysia({ prefix: '/chat' })
+  .error({
+    ChatIsRunningError,
+  })
   .get('/', async ({ query }) => {
     return await getChats(
       Number(query.limit) ?? 10,
@@ -40,9 +44,9 @@ export const chat = new Elysia({ prefix: '/chat' })
         await update(data.params.id)
         await open()
       },
-      async message({ send }, message) {
+      async message({ send, data }, message) {
         const { action } = message as { action: UserAction }
-        await act(action, send)
+        await act(data.params.id, action, send)
       },
     }
   })())

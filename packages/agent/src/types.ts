@@ -1,4 +1,4 @@
-import type { ClientAction, Resource } from '@chat-tutor/shared'
+import type { ClientAction, Page, Resource } from '@chat-tutor/shared'
 import type { ImagePart, ModelMessage } from 'ai'
 
 export const convertResources = (resources: Resource[]): (ImagePart)[] => {
@@ -22,6 +22,7 @@ export interface AgentOptions {
   model: string
   provider?: AgentProvider
   messages: ModelMessage[]
+  pages: Page[]
 }
 
 export interface AgentInput {
