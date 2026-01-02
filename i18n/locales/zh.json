@@ -74,6 +74,7 @@
   },
   "chat": {
     "notes": "笔记",
+    "noNotes": "暂无笔记",
     "send": "发送",
     "placeholder": "输入消息...",
     "uploadImage": "上传图片"

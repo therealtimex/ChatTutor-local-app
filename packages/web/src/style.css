@@ -122,5 +122,9 @@
   }
 }
 
+.dark {
+  color-scheme: dark;
+}
+
 /* Scan UI library files for Tailwind classes */
 @source "../../ui/src";

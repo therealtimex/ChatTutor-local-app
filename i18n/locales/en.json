@@ -74,6 +74,7 @@
   },
   "chat": {
     "notes": "Notes",
+    "noNotes": "No notes yet",
     "send": "Send",
     "placeholder": "Type your message here...",
     "uploadImage": "Upload Image"

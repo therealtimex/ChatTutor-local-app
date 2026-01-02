@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button, Spinner } from '@chat-tutor/ui'
+import { Button, Spinner, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Kbd, KbdGroup } from '@chat-tutor/ui'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faPaperPlane, faImage } from '@fortawesome/free-solid-svg-icons'
 import type { PromptAreaProps, PromptAreaEmits } from './types'
 import type { Resource } from '@chat-tutor/shared'
 import ImagePreview from './image-preview.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = withDefaults(defineProps<PromptAreaProps>(), {
   running: false
@@ -174,13 +177,9 @@ defineExpose({
     @paste="handlePaste"
   >
     <!-- Textarea -->
-    <textarea
-      ref="textareaRef"
-      v-model="input"
-      placeholder="Type your message... (Cmd/Ctrl + Enter to send)"
-      class="flex-1 w-full bg-transparent outline-none resize-none text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-      @keydown="handleKeyDown"
-    />
+    <textarea ref="textareaRef" v-model="input" :placeholder="t('chat.placeholder')"
+      class="m-2 flex-1 w-full bg-transparent outline-none resize-none text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+      @keydown="handleKeyDown" />
 
     <!-- Image previews -->
     <div
@@ -197,23 +196,24 @@ defineExpose({
 
     <!-- Action buttons -->
     <div class="flex flex-row items-center justify-between w-full gap-2 mt-2">
-      <!-- Image upload button -->
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        :disabled="uploading || running"
-        @click="handleImageButtonClick"
-      >
-        <Spinner
-          v-if="uploading"
-          class="size-4"
-        />
-        <FontAwesomeIcon
-          v-else
-          :icon="faImage"
-          class="size-4"
-        />
-      </Button>
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger as-child>
+            <!-- Image upload button -->
+            <Button variant="ghost" size="icon-sm" :disabled="uploading || running" @click="handleImageButtonClick">
+              <Spinner v-if="uploading" class="size-4" />
+              <FontAwesomeIcon v-else :icon="faImage" class="size-4" />
+            </Button>
+
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>
+              {{ t('chat.uploadImage') }}
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <!-- Hidden file input -->
       <input
@@ -225,25 +225,31 @@ defineExpose({
         @change="handleFileSelect"
       >
 
-      <!-- Send button -->
-      <Button
-        :disabled="running || (input.trim() === '' && resources.length === 0)"
-        size="sm"
-        @click="sendUserInput"
-      >
-        <Spinner
-          v-if="running"
-          class="size-4"
-        />
-        <FontAwesomeIcon
-          v-else
-          :icon="faPaperPlane"
-          class="size-4"
-        />
-        <span class="ml-2 hidden md:inline">
-          Send
-        </span>
-      </Button>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <!-- Send button -->
+              <Button :disabled="running || (input.trim() === '' && resources.length === 0)" size="sm"
+                @click="sendUserInput">
+                <Spinner v-if="running" class="size-4" />
+                <FontAwesomeIcon v-else :icon="faPaperPlane" class="size-4" />
+                <span class="hidden md:inline" v-if="!running">
+                  {{ t('chat.send') }}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                <KbdGroup>
+                  <Kbd>Ctrl / ⌘</Kbd>
+                  <span>+</span>
+                  <Kbd>Enter</Kbd>
+                </KbdGroup>
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
     </div>
   </div>
 </template>

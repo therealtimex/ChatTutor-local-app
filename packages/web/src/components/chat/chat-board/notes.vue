@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { Page } from '@chat-tutor/shared'
 import PageNotes from './page-notes.vue'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n() 
 
 defineProps<{
   pages: Page[]
@@ -10,7 +13,9 @@ defineProps<{
 
 <template>
   <div class="size-full flex flex-col gap-2">
-    <span class="text-md font-bold text-gray-500 dark:text-gray-400">Notes</span>
+    <span class="text-md font-bold text-gray-500 dark:text-gray-400">
+      {{ t('chat.notes') }}
+    </span>
     <div class="flex flex-col w-full overflow-y-auto">
       <div
         v-for="page in pages"

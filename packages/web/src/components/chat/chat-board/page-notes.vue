@@ -3,7 +3,9 @@ import { useActionStack } from '#/composables/use-action-stack'
 import type { NoteAppendAction, Page } from '@chat-tutor/shared'
 import { MarkdownRender } from 'markstream-vue'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const props = defineProps<{
   page: Page
 }>()
@@ -40,7 +42,7 @@ onAction((action) => {
       v-else
       class="text-gray-400 dark:text-gray-500 text-sm italic"
     >
-      No notes yet
+      {{ t('chat.noNotes') }}
     </div>
   </div>
 </template>
