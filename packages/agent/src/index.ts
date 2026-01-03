@@ -5,16 +5,18 @@ import { createBlockParser } from './utils'
 import { agent } from './prompts'
 
 export const createAgent = (options: AgentOptions) => {
-  const gateway = createGateway({
-    apiKey: options.apiKey,
-    baseURL: options.baseURL,
-    provider: options.provider,
-  })
   if (options.messages.length === 0) {
     options.messages.push()
   }
   
-  return async ({ prompt, emit, resources }: AgentInput) => {
+  return async ({
+    prompt, emit, resources, apiKey, baseURL, model, provider
+  }: AgentInput) => {
+    const gateway = createGateway({
+      apiKey,
+      baseURL,
+      provider,
+    })
     const { handle } = createBlockParser({
       pages: options.pages,
       emit,
@@ -33,7 +35,7 @@ export const createAgent = (options: AgentOptions) => {
     })
     console.log('messages', JSON.stringify(options.messages, null, 2))
     const { textStream, response } = streamText({
-      model: gateway(options.model),
+      model: gateway(model),
       messages: [
         {
           role: 'system', content: agent.system()

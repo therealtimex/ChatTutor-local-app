@@ -27,6 +27,12 @@ export const GetStreamModel = {
   params: z.object({
     id: z.string(),
   }),
+  query: z.object({
+    apiKey: z.string().optional(),
+    baseURL: z.string().optional(),
+    model: z.string().optional(),
+    provider: z.string().optional(),
+  }),
   body: z.object({
     action: z.object({
       type: z.string(),

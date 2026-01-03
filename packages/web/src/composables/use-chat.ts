@@ -5,6 +5,7 @@ import type { EdenWS } from '@elysiajs/eden/treaty'
 import { ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { createActionStack } from './use-action-stack'
+import { useSettingsStore } from '#/store/settings'
 
 export const useChat = (id: string) => {
   const messages = ref<ClientMessage[]>([])
@@ -13,6 +14,7 @@ export const useChat = (id: string) => {
   const running = ref(false)
   const stream = ref<EdenWS | null>(null)
   const streamOpen = ref(false)
+  const { baseURL, apiKey, agentModel, modelProvider } = useSettingsStore()
 
   const { push } = createActionStack('chat')
 
@@ -59,8 +61,19 @@ export const useChat = (id: string) => {
   ) => {
     running.value = true
     if (stream.value === null || !streamOpen.value) {
+      const resolveQuery = (value: string | undefined) => {
+        if (!value || value.trim() === '') return undefined
+        return value.trim()
+      }
       await new Promise((resolve) => {
-        stream.value = client.chat({ id }).stream.subscribe() as EdenWS
+        stream.value = client.chat({ id }).stream.subscribe({
+          query: {
+            apiKey: resolveQuery(apiKey),
+            baseURL: resolveQuery(baseURL),
+            model: resolveQuery(agentModel),
+            provider: resolveQuery(modelProvider),
+          }
+        }) as EdenWS
         stream.value.on('open', () => {
           streamOpen.value = true
           resolve(true)

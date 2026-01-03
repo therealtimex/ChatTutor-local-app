@@ -18,15 +18,15 @@ export type AgentProvider =
   | 'deepseek'
 
 export interface AgentOptions {
-  apiKey: string
-  baseURL: string
-  model: string
-  provider?: AgentProvider
   messages: ModelMessage[]
   pages: Page[]
 }
 
 export interface AgentInput {
+  apiKey: string
+  baseURL: string
+  model: string
+  provider?: AgentProvider
   prompt: string
   emit: AgentEmitter
   resources?: Resource[]

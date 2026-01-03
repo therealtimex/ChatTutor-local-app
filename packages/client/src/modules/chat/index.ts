@@ -3,6 +3,7 @@ import { GetByIdModel, GetModel, GetStatusModel, GetStreamModel, PostModel } fro
 import { createChat, createChatStream, getChatById, getChats, getChatStatus } from './service'
 import { ClientMessage, Page, Status, UserAction } from '@chat-tutor/shared'
 import { ChatIsRunningError } from './error'
+import { AgentProvider } from '@chat-tutor/agent'
 
 export const chat = new Elysia({ prefix: '/chat' })
   .error({
@@ -42,7 +43,12 @@ export const chat = new Elysia({ prefix: '/chat' })
       ...GetStreamModel,
       async open({ data }) {
         await update(data.params.id)
-        await open()
+        await open({
+          apiKey: data.query.apiKey,
+          baseURL: data.query.baseURL,
+          model: data.query.model,
+          provider: data.query.provider as AgentProvider,
+        })
       },
       async message({ send, data }, message) {
         const { action } = message as { action: UserAction }

@@ -4,7 +4,7 @@ import { desc, eq } from 'drizzle-orm'
 import { ClientAction, ClientMessage, Context, createMessageResolver, Page, Status, UserAction } from '@chat-tutor/shared'
 import { AgentProvider, createAgent, getTitle } from '@chat-tutor/agent'
 import { ModelMessage } from 'ai'
-import { ChatIsRunningError } from './error'
+import { AgentConfigError, ChatIsRunningError } from './error'
 
 export const getChats = async (limit: number, offset: number) => {
   try {
@@ -161,6 +161,10 @@ export const createChatStream = () => {
   const agentContext: ModelMessage[] = []
   const messages: ClientMessage[] = []
   const pages: Page[] = []
+  let apiKey = process.env.MODEL_API_KEY
+  let baseURL = process.env.MODEL_BASE_URL
+  let model = process.env.AGENT_MODEL
+  let provider = process.env.AGENT_MODEL_PROVIDER as AgentProvider
   const update = async (id: string) => {
     const { context: c, messages: m, pages: p } = await getChatRecord(id)
     messages.length = 0
@@ -179,15 +183,21 @@ export const createChatStream = () => {
   })
   const agent = createAgent({
     messages: agentContext,
-    apiKey: process.env.MODEL_API_KEY!,
-    baseURL: process.env.MODEL_BASE_URL!,
-    model: process.env.AGENT_MODEL!,
-    provider: process.env.AGENT_MODEL_PROVIDER as AgentProvider,
     pages,
   })
   return {
     update,
-    async open() { },
+    async open(query: {
+      apiKey?: string
+      baseURL?: string
+      model?: string
+      provider?: AgentProvider
+    }) {
+      if (query.apiKey) apiKey = query.apiKey
+      if (query.baseURL) baseURL = query.baseURL
+      if (query.model) model = query.model
+      if (query.provider) provider = query.provider
+    },
     async act(id: string, input: UserAction, emit: (action: ClientAction) => void) {
       await update(id)
       resolve(input)
@@ -198,6 +208,9 @@ export const createChatStream = () => {
             throw new ChatIsRunningError('Chat is already running')
           }
           await updateChatStatus(id, Status.RUNNING)
+          if (!apiKey || !baseURL || !model || !provider) {
+            throw new AgentConfigError('Agent configuration is not set')
+          }
           await agent({
             prompt: input.options.prompt,
             emit: (action) => {
@@ -205,6 +218,10 @@ export const createChatStream = () => {
               emit(action)
             },
             resources: input.options.resources || [],
+            apiKey,
+            baseURL,
+            model,
+            provider,
           })
           await updateChatRecord({
             id,
