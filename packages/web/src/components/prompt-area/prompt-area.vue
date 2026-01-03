@@ -7,6 +7,7 @@ import type { PromptAreaProps, PromptAreaEmits } from './types'
 import type { Resource } from '@chat-tutor/shared'
 import ImagePreview from './image-preview.vue'
 import { useI18n } from 'vue-i18n'
+import { client } from '#/utils/client'
 
 const { t } = useI18n()
 
@@ -64,24 +65,18 @@ const uploadFile = async (file: File) => {
 
   uploading.value = true
   try {
-    const formData = new FormData()
-    formData.append('file', file)
-
-    const response = await fetch('/api/file/upload', {
-      method: 'POST',
-      body: formData,
+    const { data, error } = await client.resource.image.post({
+      file,
     })
 
-    if (!response.ok) {
-      throw new Error('Upload failed')
+    if (error || !data) {
+      throw new Error(error?.message || 'Upload failed')
     }
-
-    const data = await response.json() as { url: string; id: string; key: string }
 
     resources.value.push({
       type: 'image',
       url: data.url,
-      id: data.id,
+      id: data.key, // Use the S3 key as the unique ID
     })
   } catch (error) {
     console.error('Failed to upload file:', error)
@@ -169,7 +164,7 @@ defineExpose({
 
 <template>
   <div
-    class="size-full bg-gray-50 dark:bg-gray-800 p-3 rounded-2xl flex flex-col border transition-all"
+    class="w-full min-h-[120px] bg-gray-50 dark:bg-gray-800 p-3 rounded-2xl flex flex-col border transition-all"
     :class="isDragging ? 'border-blue-500 border-2 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'"
     @dragover="handleDragOver"
     @dragleave="handleDragLeave"
@@ -177,14 +172,18 @@ defineExpose({
     @paste="handlePaste"
   >
     <!-- Textarea -->
-    <textarea ref="textareaRef" v-model="input" :placeholder="t('chat.placeholder')"
-      class="m-2 flex-1 w-full bg-transparent outline-none resize-none text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-      @keydown="handleKeyDown" />
+    <textarea
+      ref="textareaRef"
+      v-model="input"
+      :placeholder="t('chat.placeholder')"
+      class="m-2 min-h-[40px] max-h-[200px] w-full bg-transparent outline-none resize-none text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+      @keydown="handleKeyDown"
+    />
 
     <!-- Image previews -->
     <div
       v-if="resources.length > 0"
-      class="flex flex-row items-center w-full gap-2 mt-2 mb-2"
+      class="flex flex-row items-center w-full gap-2 px-2 pb-2 overflow-x-auto flex-shrink-0"
     >
       <ImagePreview
         v-for="resource in resources"
@@ -195,17 +194,27 @@ defineExpose({
     </div>
 
     <!-- Action buttons -->
-    <div class="flex flex-row items-center justify-between w-full gap-2 mt-2">
-
+    <div class="flex flex-row items-center justify-between w-full gap-2 px-2 pb-2 flex-shrink-0">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger as-child>
             <!-- Image upload button -->
-            <Button variant="ghost" size="icon-sm" :disabled="uploading || running" @click="handleImageButtonClick">
-              <Spinner v-if="uploading" class="size-4" />
-              <FontAwesomeIcon v-else :icon="faImage" class="size-4" />
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              :disabled="uploading || running"
+              @click="handleImageButtonClick"
+            >
+              <Spinner
+                v-if="uploading"
+                class="size-4"
+              />
+              <FontAwesomeIcon
+                v-else
+                :icon="faImage"
+                class="size-4"
+              />
             </Button>
-
           </TooltipTrigger>
           <TooltipContent>
             <p>
@@ -226,30 +235,43 @@ defineExpose({
       >
 
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger as-child>
-              <!-- Send button -->
-              <Button :disabled="running || (input.trim() === '' && resources.length === 0)" size="sm"
-                @click="sendUserInput">
-                <Spinner v-if="running" class="size-4" />
-                <FontAwesomeIcon v-else :icon="faPaperPlane" class="size-4" />
-                <span class="hidden md:inline" v-if="!running">
-                  {{ t('chat.send') }}
-                </span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                <KbdGroup>
-                  <Kbd>Ctrl / ⌘</Kbd>
-                  <span>+</span>
-                  <Kbd>Enter</Kbd>
-                </KbdGroup>
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger as-child>
+            <!-- Send button -->
+            <Button
+              :disabled="running || (input.trim() === '' && resources.length === 0)"
+              size="sm"
+              @click="sendUserInput"
+            >
+              <Spinner
+                v-if="running"
+                class="size-4"
+              />
+              <FontAwesomeIcon
+                v-else
+                :icon="faPaperPlane"
+                class="size-4"
+              />
+              <span
+                v-if="!running"
+                class="hidden md:inline"
+              >
+                {{ t('chat.send') }}
+              </span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>
+              <KbdGroup>
+                <Kbd>Ctrl / ⌘</Kbd>
+                <span>+</span>
+                <Kbd>Enter</Kbd>
+              </KbdGroup>
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   </div>
 </template>

@@ -90,15 +90,25 @@ onUnmounted(() => {
 
 <template>
   <div class="flex flex-col h-full w-full overflow-hidden">
-    <div ref="chatContainerRef" class="w-full flex-1 min-h-0 overflow-y-auto p-2" @scroll="handleScroll">
+    <div
+      ref="chatContainerRef"
+      class="w-full flex-1 min-h-0 overflow-y-auto p-2"
+      @scroll="handleScroll"
+    >
       <div class="flex flex-col gap-2">
         <Messages v-model:messages="messages" />
       </div>
     </div>
     <div
-      class="max-md:fixed max-md:bottom-0 max-md:left-0 max-md:h-32 max-md:bg-background w-full p-2 h-48 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
-      <PromptArea ref="promptAreaRef" v-model:input="input" v-model:resources="resources" :running="running"
-        @send="handleSend" />
+      class="max-md:fixed max-md:bottom-0 max-md:left-0 max-md:bg-background w-full p-2 border-t border-gray-200 dark:border-gray-700 flex-shrink-0"
+    >
+      <PromptArea
+        ref="promptAreaRef"
+        v-model:input="input"
+        v-model:resources="resources"
+        :running="running"
+        @send="handleSend"
+      />
     </div>
   </div>
 </template>

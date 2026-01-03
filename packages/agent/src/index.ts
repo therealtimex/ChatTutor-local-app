@@ -31,6 +31,7 @@ export const createAgent = (options: AgentOptions) => {
         ...convertResources(resources || []),
       ]
     })
+    console.log('messages', JSON.stringify(options.messages, null, 2))
     const { textStream, response } = streamText({
       model: gateway(options.model),
       messages: [

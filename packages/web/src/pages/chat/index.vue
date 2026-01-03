@@ -32,6 +32,7 @@ onMounted(async () => {
     store.prompt = null
     store.resources = []
     ask(prompt, resources)
+    console.log('ask', prompt, resources)
   }
   loading.value = false
 })
@@ -43,11 +44,16 @@ onMounted(async () => {
   <template v-if="loading">
     <Loading />
   </template>
-  <div v-else class="size-full flex flex-row overflow-y-auto flex-wrap max-md:pb-40"
+  <div
+    v-else
+    class="size-full flex flex-row overflow-y-auto flex-wrap max-md:pb-40"
   >
     <div class="max-md:mx-2 w-full md:w-5/7 flex flex-col md:h-full py-2 gap-2 overflow-hidden">
       <div class="flex flex-row flex-1 min-h-0 overflow-hidden">
-        <ChatBoard :pages="pages" :current="currentPage" />
+        <ChatBoard
+          :pages="pages"
+          :current="currentPage"
+        />
       </div>
       <div class="flex flex-row h-48 shrink-0">
         <ChatPagination

@@ -15,7 +15,7 @@ const emits = defineEmits<{
 </script>
 
 <template>
-  <div class="relative size-20 group rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
+  <div class="relative size-20 flex-shrink-0 group rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 shadow-sm">
     <img
       :src="url"
       alt="Upload preview"

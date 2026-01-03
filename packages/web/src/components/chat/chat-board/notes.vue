@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Page } from '@chat-tutor/shared'
 import PageNotes from './page-notes.vue'
-import { useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n() 
 
@@ -21,7 +21,7 @@ defineProps<{
         v-for="page in pages"
         v-show="current === page.id"
         :key="page.id"
-class="size-full"
+        class="size-full"
       >
         <PageNotes :page="page" />
       </div>

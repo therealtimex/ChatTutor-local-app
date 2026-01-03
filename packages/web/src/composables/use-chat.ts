@@ -23,6 +23,8 @@ export const useChat = (id: string) => {
     if (action.type === 'page-create') {
       pages.value.push(action.options.page)
       currentPage.value = action.options.page.id
+    } else if (action.type === 'end') {
+      running.value = false
     }
   }
 
@@ -71,9 +73,6 @@ export const useChat = (id: string) => {
           const action = message.data as unknown as ClientAction
           resolveAction(action)
           handleAction(action)
-          if (action.type === 'end') {
-            running.value = false
-          }
         })
       })
     }

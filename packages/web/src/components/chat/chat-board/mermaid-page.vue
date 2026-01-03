@@ -40,7 +40,7 @@ const contentNode = computed(() => ({
 
 <template>
   <MermaidBlockNode
-:node="contentNode"
+    :node="contentNode"
     max-height="100%"
     class="size-full"
   />

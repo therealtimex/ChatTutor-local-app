@@ -13,7 +13,7 @@ const { baseURL, apiKey, agentModel, titleModel, colorMode, modelProvider, model
 const { t, availableLocales } = useI18n()
 
 const colorOptions = computed(() => {
-  return ["light", "dark", "system"].map(mode => ({
+  return ['light', 'dark', 'system'].map(mode => ({
     label: t(`settings.interface.colorModeOptions.${mode}`),
     value: mode
   }))
@@ -31,14 +31,13 @@ const modelProviderOptions = computed(() => {
   }))
 })
 
-const sectionTitleClass = 'font-semibold text-muted-foreground border-b pt-3 pb-2';
+const sectionTitleClass = 'font-semibold text-muted-foreground border-b pt-3 pb-2'
 
 </script>
 
 <template>
   <div class="p-5 overflow-y-auto h-full">
     <div class="max-w-2xl mx-auto">
-
       <h1 class="text-2xl font-extrabold lg:text-4xl mb-2 pt-3 max-md:pl-14 max-md:pt-1">
         {{ t('settings.title') }}
       </h1>
@@ -50,19 +49,37 @@ const sectionTitleClass = 'font-semibold text-muted-foreground border-b pt-3 pb-
           {{ t('settings.models.title') }}
         </h2>
 
-        <SettingsItem :label="t('settings.models.provider')" type="select" :options="modelProviderOptions"
-          v-model="modelProvider" />
+        <SettingsItem
+          v-model="modelProvider"
+          :label="t('settings.models.provider')"
+          type="select"
+          :options="modelProviderOptions"
+        />
 
-        <SettingsItem :label="t('settings.models.baseURL')" :placeholder="modelProviderDetails.baseURL"
-          v-model="baseURL" />
+        <SettingsItem
+          v-model="baseURL"
+          :label="t('settings.models.baseURL')"
+          :placeholder="modelProviderDetails.baseURL"
+        />
 
-        <SettingsItem :label="t('settings.models.apiKey')" type="password"
-          :description="t('settings.models.apiKeyDescription')" v-model="apiKey" />
+        <SettingsItem
+          v-model="apiKey"
+          :label="t('settings.models.apiKey')"
+          type="password"
+          :description="t('settings.models.apiKeyDescription')"
+        />
 
-        <SettingsItem :label="t('settings.models.agentModel')" v-model="agentModel" />
+        <SettingsItem
+          v-model="agentModel"
+          :label="t('settings.models.agentModel')"
+        />
 
-        <SettingsItem :label="t('settings.models.titleModel')" :placeholder="agentModel"
-          :description="t('settings.models.titleModelDescription')" v-model="titleModel" />
+        <SettingsItem
+          v-model="titleModel"
+          :label="t('settings.models.titleModel')"
+          :placeholder="agentModel"
+          :description="t('settings.models.titleModelDescription')"
+        />
       </section>
 
       <section class="space-y-3">
@@ -71,13 +88,20 @@ const sectionTitleClass = 'font-semibold text-muted-foreground border-b pt-3 pb-
           {{ t('settings.interface.title') }}
         </h2>
 
-        <SettingsItem :label="t('settings.interface.colorMode')" type="select" :options="colorOptions"
-          v-model="colorMode" />
+        <SettingsItem
+          v-model="colorMode"
+          :label="t('settings.interface.colorMode')"
+          type="select"
+          :options="colorOptions"
+        />
 
-        <SettingsItem :label="t('settings.interface.language')" type="select" :options="localeOptions"
-          v-model="language" />
+        <SettingsItem
+          v-model="language"
+          :label="t('settings.interface.language')"
+          type="select"
+          :options="localeOptions"
+        />
       </section>
     </div>
-
   </div>
 </template>

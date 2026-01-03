@@ -6,7 +6,7 @@ export const convertResources = (resources: Resource[]): (ImagePart)[] => {
     if (resource.type === 'image') {
       return {
         type: 'image' as const,
-        image: new URL(resource.url),
+        image: resource.url,
       }
     }
   }).filter((r) => r !== undefined)

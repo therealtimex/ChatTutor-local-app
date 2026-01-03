@@ -31,10 +31,18 @@ const modelValue = defineModel<string>()
 
 <template>
   <div class="grid w-full items-center gap-1.5">
-    <Label :for="label" class="text-sm font-medium">{{ label }}</Label>
+    <Label
+      :for="label"
+      class="text-sm font-medium"
+    >{{ label }}</Label>
 
     <template v-if="type === 'input' || type === 'password'">
-      <Input :id="label" :type="type" :placeholder="placeholder" v-model="modelValue" />
+      <Input
+        :id="label"
+        v-model="modelValue"
+        :type="type"
+        :placeholder="placeholder"
+      />
     </template>
 
     <template v-else-if="type === 'select'">
@@ -45,14 +53,20 @@ const modelValue = defineModel<string>()
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem v-for="opt in options" :value="opt.value">
+          <SelectItem
+            v-for="opt in options"
+            :value="opt.value"
+          >
             {{ opt.label }}
           </SelectItem>
         </SelectContent>
       </Select>
     </template>
 
-    <p v-if="description" class="text-sm text-muted-foreground">
+    <p
+      v-if="description"
+      class="text-sm text-muted-foreground"
+    >
       {{ description }}
     </p>
   </div>

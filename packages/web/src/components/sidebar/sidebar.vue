@@ -30,13 +30,20 @@ watch(router.currentRoute, (route) => {
 </script>
 
 <template>
-  <Sidebar collapsible="icon" variant="inset">
+  <Sidebar
+    collapsible="icon"
+    variant="inset"
+  >
     <SidebarContent class="text-gray-500 select-none dark:text-gray-400">
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton as-child class="size-8" @click="toggleSidebar">
+              <SidebarMenuButton
+                as-child
+                class="size-8"
+                @click="toggleSidebar"
+              >
                 <div class="size-4">
                   <FontAwesomeIcon :icon="faBars" />
                 </div>
@@ -49,7 +56,11 @@ watch(router.currentRoute, (route) => {
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton as-child :tooltip="t('common.newChat')" @click="router.push('/')">
+              <SidebarMenuButton
+                as-child
+                :tooltip="t('common.newChat')"
+                @click="router.push('/')"
+              >
                 <div class="size-4">
                   <FontAwesomeIcon :icon="faPlus" />
                   <span>
@@ -59,7 +70,11 @@ watch(router.currentRoute, (route) => {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton as-child :tooltip="t('settings.title')" @click="router.push('/settings')">
+              <SidebarMenuButton
+                as-child
+                :tooltip="t('settings.title')"
+                @click="router.push('/settings')"
+              >
                 <div>
                   <FontAwesomeIcon :icon="faCog" />
                   <span>
@@ -77,10 +92,16 @@ watch(router.currentRoute, (route) => {
   <main class="size-full overflow-hidden">
     <slot name="main" />
   </main>
-  <div class="fixed top-5 left-4" v-if="isMobile">
-    <Button variant="ghost" class="bg-background shadow" @click="toggleSidebar">
+  <div
+    v-if="isMobile"
+    class="fixed top-5 left-4"
+  >
+    <Button
+      variant="ghost"
+      class="bg-background shadow"
+      @click="toggleSidebar"
+    >
       <FontAwesomeIcon :icon="faBars" />
     </Button>
   </div>
-
 </template>

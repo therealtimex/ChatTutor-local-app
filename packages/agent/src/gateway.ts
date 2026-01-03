@@ -18,5 +18,6 @@ export const createGateway = ({ apiKey, baseURL, provider = 'openai' }: GatewayO
   return providers[provider]({
     apiKey,
     baseURL,
+    
   })
 }

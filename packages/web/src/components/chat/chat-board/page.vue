@@ -14,14 +14,18 @@ defineProps<{
     <div
       v-for="page in pages"
       :key="page.id"
-class="absolute inset-0"
+      class="absolute inset-0"
     >
       <MermaidPage
         v-if="page.type === PageType.MERMAID"
         v-show="current === page.id"
         :page="page"
-        :visible="current === page.id" />
-      <GGBPage v-if="page.type === PageType.GGB" v-show="current === page.id" :page="page"
+        :visible="current === page.id"
+      />
+      <GGBPage
+        v-if="page.type === PageType.GGB"
+        v-show="current === page.id"
+        :page="page"
         :visible="current === page.id"
       />
     </div>

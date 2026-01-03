@@ -46,7 +46,10 @@ const { isMobile } = useSidebar()
 
 <template>
   <div class="size-full flex flex-col p-5">
-    <div class="flex flex-row w-full justify-start items-center gap-1" :class="{ 'ml-10': isMobile }">
+    <div
+      class="flex flex-row w-full justify-start items-center gap-1"
+      :class="{ 'ml-10': isMobile }"
+    >
       <img
         src="/logo.png"
         alt="ChatTutor"

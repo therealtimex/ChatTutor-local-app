@@ -40,7 +40,7 @@ const fetchItems = async () => {
 
 const loading = computed(() => {
   return fetching.value && items.value.length === 0
-});
+})
 
 // const interval = ref<number | null>(null)
 
@@ -58,7 +58,10 @@ onUnmounted(() => {
   <SidebarGroup>
     <SidebarGroupLabel>
       {{ t('common.recent') }}
-      <Spinner v-if="loading" class="ml-2" />
+      <Spinner
+        v-if="loading"
+        class="ml-2"
+      />
     </SidebarGroupLabel>
     <SidebarGroupContent class="overflow-y-auto">
       <SidebarMenu>

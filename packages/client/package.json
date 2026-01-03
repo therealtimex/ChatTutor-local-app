@@ -2,13 +2,16 @@
   "name": "@chat-tutor/client",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "bun test",
+    "test:resource": "bun test test/resource.test.ts",
+    "test:chat": "bun test test/chat.test.ts",
     "dev": "bun run --env-file=\"../../.env\" --watch src/index.ts"
   },
   "exports": {
     "./sdk": "./src/sdk.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.962.0",
     "@chat-tutor/agent": "workspace:*",
     "@chat-tutor/db": "workspace:*",
     "@chat-tutor/shared": "workspace:*",
