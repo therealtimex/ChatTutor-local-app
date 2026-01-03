@@ -100,7 +100,7 @@ onUnmounted(() => {
       </div>
     </div>
     <div
-      class="max-md:fixed max-md:bottom-0 max-md:left-0 max-md:bg-background w-full p-2 border-t border-gray-200 dark:border-gray-700 flex-shrink-0"
+      class="max-md:fixed max-md:bottom-0 max-md:left-0 max-md:bg-background w-full p-2 flex-shrink-0"
     >
       <PromptArea
         ref="promptAreaRef"

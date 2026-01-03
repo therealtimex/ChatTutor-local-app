@@ -34,6 +34,7 @@ const loadGGBApplet = () => new Promise<{
 }>((resolve) => {
   const applet = new GGBApplet({
     id: props.page.id,
+    
 
     appletOnLoad(api) {
       resolve({ api })
