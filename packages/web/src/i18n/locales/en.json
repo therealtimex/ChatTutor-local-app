@@ -90,6 +90,10 @@
     "error": {
       "title": "Error",
       "message": "An unexpected error has occurred."
+    },
+    "chat": {
+      "title": "Failed to Load Chat",
+      "message": "An error occurred while loading the chat."
     }
   }
 }

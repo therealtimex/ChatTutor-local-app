@@ -10,6 +10,7 @@
       <p class="font-light">
         {{ t(`error.${type || 'error'}.message`) }}
       </p>
+      <pre v-if="message" class="mt-2 p-2 bg-muted rounded overflow-x-auto w-96">{{ message }}</pre>
       <Button @click="router.push('/')" variant="outline" class="mt-5">
         <FontAwesomeIcon :icon="faHome" />
         {{ t('common.backHome') }}

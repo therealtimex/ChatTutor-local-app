@@ -6,6 +6,7 @@ import { ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { createActionStack } from './use-action-stack'
 import { useSettingsStore } from '#/store/settings'
+import { useRouter } from 'vue-router'
 
 export const useChat = (id: string) => {
   const messages = ref<ClientMessage[]>([])
@@ -15,6 +16,7 @@ export const useChat = (id: string) => {
   const stream = ref<EdenWS | null>(null)
   const streamOpen = ref(false)
   const { baseURL, apiKey, agentModel, modelProvider } = useSettingsStore()
+  const router = useRouter()
 
   const { push } = createActionStack('chat')
 
@@ -39,7 +41,7 @@ export const useChat = (id: string) => {
   })
 
   const switchPage = (id: string) => {
-    if (!Object.values(pages.value).some(page => page.id === id)) {
+    if (!Object.values(pages.value).some((page) => page.id === id)) {
       return
     }
     console.log('switchPage', id)
@@ -48,17 +50,19 @@ export const useChat = (id: string) => {
 
   const sync = async () => {
     const { data, error } = await client.chat({ id }).get()
-    if (error || !data) {
+    if (error) {
+      router.push({
+        name: 'error',
+        params: { type: 'chat', message: error.value.toString() },
+      })
       return
     }
+    if (!data) return
     messages.value = data.messages
     pages.value = data.pages
   }
 
-  const ask = async (
-    prompt: string,
-    resources: Resource[]
-  ) => {
+  const ask = async (prompt: string, resources: Resource[]) => {
     running.value = true
     if (stream.value === null || !streamOpen.value) {
       const resolveQuery = (value: string | undefined) => {
@@ -72,7 +76,7 @@ export const useChat = (id: string) => {
             baseURL: resolveQuery(baseURL),
             model: resolveQuery(agentModel),
             provider: resolveQuery(modelProvider),
-          }
+          },
         }) as EdenWS
         stream.value.on('open', () => {
           streamOpen.value = true
@@ -98,7 +102,7 @@ export const useChat = (id: string) => {
     }
     stream.value?.send({
       action,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
     resolveAction(action)
   }

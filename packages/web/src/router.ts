@@ -23,6 +23,13 @@ const router = createRouter({
             type: '404',
           },
         },
+        // error
+        {
+          name: 'error',
+          path: 'error/:type/:message?',
+          component: Error,
+          props: true,
+        },
       ],
     },
   ],
